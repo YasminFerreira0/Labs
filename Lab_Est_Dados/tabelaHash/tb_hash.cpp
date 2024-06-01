@@ -3,53 +3,49 @@
 
 using namespace std;
 
-// Tamanho da tabela hash
-const int TABLE_SIZE = 10;
+const int TAMANHO = 10;
 
-// Estrutura para Hashing Encadeamento Fechado
 struct Node {
     int key;
     Node* next;
 };
 
-// Tabela de Hashing Encadeamento Fechado
-Node* chainingTable[TABLE_SIZE];
+Node* encadeamento[TAMANHO];
 
-// Funções para Hashing Encadeamento Fechado
-void initChainingTable() {
-    for (int i = 0; i < TABLE_SIZE; ++i) {
-        chainingTable[i] = nullptr;
+void iniciarEncadeamento() {
+    for (int i = 0; i < TAMANHO; ++i) {
+        encadeamento[i] = nullptr;
     }
 }
 
-void chainingInsert(int key) {
-    int index = key % TABLE_SIZE;
-    Node* newNode = new Node{key, chainingTable[index]};
-    chainingTable[index] = newNode;
+void insercaoEncadeamento(int key) {
+    int index = key % TAMANHO;
+    Node* newNode = new Node{key, encadeamento[index]};
+    encadeamento[index] = newNode;
 }
 
-bool chainingSearch(int key, int& comparisons) {
-    int index = key % TABLE_SIZE;
-    comparisons = 0;
-    Node* current = chainingTable[index];
+bool buscaEncadeamento(int key, int& comparacoes) {
+    int index = key % TAMANHO;
+    comparacoes = 0;
+    Node* current = encadeamento[index];
     while (current) {
-        comparisons++;
+        comparacoes++;
         if (current->key == key) return true;
         current = current->next;
     }
     return false;
 }
 
-bool chainingRemove(int key) {
-    int index = key % TABLE_SIZE;
-    Node* current = chainingTable[index];
+bool remocaoEncadeamento(int key) {
+    int index = key % TAMANHO;
+    Node* current = encadeamento[index];
     Node* prev = nullptr;
     while (current) {
         if (current->key == key) {
             if (prev) {
                 prev->next = current->next;
             } else {
-                chainingTable[index] = current->next;
+                encadeamento[index] = current->next;
             }
             delete current;
             return true;
@@ -60,10 +56,10 @@ bool chainingRemove(int key) {
     return false;
 }
 
-void displayChainingTable() {
-    for (int i = 0; i < TABLE_SIZE; ++i) {
+void mostraEncadeamento() {
+    for (int i = 0; i < TAMANHO; ++i) {
         cout << i << ": ";
-        Node* current = chainingTable[i];
+        Node* current = encadeamento[i];
         while (current) {
             cout << current->key << " -> ";
             current = current->next;
@@ -72,28 +68,26 @@ void displayChainingTable() {
     }
 }
 
-// Tabela de Hashing Linear
-int linearTable[TABLE_SIZE];
-bool linearOccupied[TABLE_SIZE];
+int linearTable[TAMANHO];
+bool linearOccupied[TAMANHO];
 
-// Funções para Hashing Linear
-void initLinearTable() {
-    for (int i = 0; i < TABLE_SIZE; ++i) {
+void iniciarLinear() {
+    for (int i = 0; i < TAMANHO; ++i) {
         linearTable[i] = -1;
         linearOccupied[i] = false;
     }
 }
 
-void linearInsert(int key) {
-    int index = key % TABLE_SIZE;
+void insercaoLinear(int key) {
+    int index = key % TAMANHO;
     int original_index = index;
     int collisions = 0;
 
     while (linearOccupied[index]) {
-        index = (index + 1) % TABLE_SIZE;
+        index = (index + 1) % TAMANHO;
         collisions++;
         if (index == original_index) {
-            cout << "Table is full, cannot insert " << key << endl;
+            cout << "A tabela esta cheia." << key << endl;
             return;
         }
     }
@@ -101,25 +95,25 @@ void linearInsert(int key) {
     linearTable[index] = key;
     linearOccupied[index] = true;
 
-    cout << "Inserted key " << key << " in Linear Hashing with " << collisions << " collisions" << endl;
+    cout << "Insercao da chave  " << key << " na Hashing Linear com " << collisions << " colisoes." << endl;
 }
 
-bool linearSearch(int key, int& comparisons) {
-    int index = key % TABLE_SIZE;
+bool buscaLinear(int key, int& comparacoes) {
+    int index = key % TAMANHO;
     int original_index = index;
-    comparisons = 0;
+    comparacoes = 0;
 
     while (linearOccupied[index]) {
-        comparisons++;
+        comparacoes++;
         if (linearTable[index] == key) return true;
-        index = (index + 1) % TABLE_SIZE;
+        index = (index + 1) % TAMANHO;
         if (index == original_index) return false;
     }
     return false;
 }
 
-bool linearRemove(int key) {
-    int index = key % TABLE_SIZE;
+bool remocaoLinear(int key) {
+    int index = key % TAMANHO;
     int original_index = index;
 
     while (linearOccupied[index]) {
@@ -128,14 +122,14 @@ bool linearRemove(int key) {
             linearOccupied[index] = false;
             return true;
         }
-        index = (index + 1) % TABLE_SIZE;
+        index = (index + 1) % TAMANHO;
         if (index == original_index) return false;
     }
     return false;
 }
 
-void displayLinearTable() {
-    for (int i = 0; i < TABLE_SIZE; ++i) {
+void mostrarLinear() {
+    for (int i = 0; i < TAMANHO; ++i) {
         if (linearOccupied[i])
             cout << i << ": " << linearTable[i] << endl;
         else
@@ -143,47 +137,48 @@ void displayLinearTable() {
     }
 }
 
-void showMenu() {
+void mostrarMenu() {
     cout << "Menu:" << endl;
     cout << "1. Inserir" << endl;
     cout << "2. Buscar" << endl;
     cout << "3. Remover" << endl;
     cout << "4. Mostrar" << endl;
     cout << "5. Encerrar" << endl;
+    cout <<endl;
     cout << "Escolha uma opcao: ";
 }
 
 int main() {
-    initChainingTable();
-    initLinearTable();
+    iniciarEncadeamento();
+    iniciarLinear();
 
     while (true) {
-        showMenu();
-        int choice;
-        cin >> choice;
+        mostrarMenu();
+        int opcao;
+        cin >> opcao;
 
-        if (choice == 5) break;
+        if (opcao == 5) break;
 
         int key;
-        switch (choice) {
+        switch (opcao) {
             case 1:
                 cout << "Digite o valor para inserir: ";
                 cin >> key;
-                chainingInsert(key);
-                linearInsert(key);
+                insercaoEncadeamento(key);
+                insercaoLinear(key);
                 break;
             case 2:
                 cout << "Digite o valor para buscar: ";
                 cin >> key;
-                int comparisons;
+                int comparacoes;
 
-                if (chainingSearch(key, comparisons))
-                    cout << "Valor encontrado na tabela de Hashing Encadeamento Fechado com " << comparisons << " comparacoes." << endl;
+                if (buscaEncadeamento(key, comparacoes))
+                    cout << "Valor encontrado na tabela de Hashing Encadeamento Fechado com " << comparacoes << " comparacoes." << endl;
                 else
                     cout << "Valor nao encontrado na tabela de Hashing Encadeamento Fechado." << endl;
 
-                if (linearSearch(key, comparisons))
-                    cout << "Valor encontrado na tabela de Hashing Linear com " << comparisons << " comparacoes." << endl;
+                if (buscaLinear(key, comparacoes))
+                    cout << "Valor encontrado na tabela de Hashing Linear com " << comparacoes << " comparacoes." << endl;
                 else
                     cout << "Valor nao encontrado na tabela de Hashing Linear." << endl;
                 break;
@@ -191,24 +186,24 @@ int main() {
                 cout << "Digite o valor para remover: ";
                 cin >> key;
 
-                if (chainingRemove(key))
+                if (remocaoEncadeamento(key))
                     cout << "Valor removido da tabela de Hashing Encadeamento Fechado." << endl;
                 else
                     cout << "Valor nao encontrado na tabela de Hashing Encadeamento Fechado." << endl;
 
-                if (linearRemove(key))
+                if (remocaoLinear(key))
                     cout << "Valor removido da tabela de Hashing Linear." << endl;
                 else
                     cout << "Valor nao encontrado na tabela de Hashing Linear." << endl;
                 break;
             case 4:
                 cout << "Escolha a tabela para mostrar (1: Encadeamento Fechado, 2: Hashing Linear): ";
-                int tableChoice;
-                cin >> tableChoice;
-                if (tableChoice == 1) {
-                    displayChainingTable();
-                } else if (tableChoice == 2) {
-                    displayLinearTable();
+                int tableOpcao;
+                cin >> tableOpcao;
+                if (tableOpcao == 1) {
+                    mostraEncadeamento();
+                } else if (tableOpcao == 2) {
+                    mostrarLinear();
                 } else {
                     cout << "Escolha invalida." << endl;
                 }
