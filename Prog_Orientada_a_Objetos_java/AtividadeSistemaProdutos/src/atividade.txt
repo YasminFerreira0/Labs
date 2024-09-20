@@ -1,0 +1,20 @@
+    *Atividade: Sistema de Produtos*
+
+Vamos criar um sistema para gerenciar diferentes tipos de produtos em uma loja.
+
+Cada produto deve ser capaz de calcular o preço com desconto e exibir suas informações.
+
+
+A interface deve definir métodos para calcular o preço com desconto e obter a descrição do produto.
+
+X -> Esta classe deve definir atributos comuns para produtos, como nome e preço. A classe deve ter métodos para exibir informações do produto, mas não deve implementar a interface.
+
+Crie pelo menos duas subclasses que representam tipos específicos de produtos, como eletrônicos e roupas.
+
+Cada subclasse deve possuir atributos proprios encapsulados, ao menos 2 construtores, metodos acessores, implementar os métodos da interface e fornecer regras específicas para calcular o preço com desconto.
+
+ Crie uma classe para testar(Main) o polimorfismo:
+---> Crie uma lista para armazenar os produtos
+---> crie um menu que ofereça opção de cadastro e listagem
+--->A listagem deve exibir as informações e preços com desconto  do produto
+O menu deve utilizar recursos da classe javax.swing.JOptionPane
