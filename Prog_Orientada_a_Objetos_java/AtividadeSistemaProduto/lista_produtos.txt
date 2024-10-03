@@ -1,0 +1,6 @@
+Nome: teclado
+Preco: R$235.0
+Descricao: teclado mecanico
+Preço com desconto: R$188.0
+
+-----------------------
